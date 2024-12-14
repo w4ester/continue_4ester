@@ -7,6 +7,7 @@ import asyncio
 
 from fastapi import FastAPI
 from pydantic import BaseModel
+import secrets
 
 
 class Item(BaseModel):
@@ -32,14 +33,13 @@ class RandomBody(BaseModel):
 
 @app.post("/random")
 async def stream_random_chars(body: RandomBody):
-    import random
     import string
 
     from fastapi.responses import StreamingResponse
 
     async def generate_chars():
         for i in range(500):
-            yield random.choice(string.ascii_letters)
+            yield secrets.choice(string.ascii_letters)
             await asyncio.sleep(0.01)
 
     return StreamingResponse(generate_chars())
